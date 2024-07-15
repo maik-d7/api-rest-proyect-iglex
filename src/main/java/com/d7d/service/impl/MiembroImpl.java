@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,12 +19,28 @@ public class MiembroImpl implements IMiembro {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Miembro> listAll() {
-        return (List<Miembro>) miembroDao.findAll();
+    public List<MiembroDto> listAll() {
+        List<MiembroDto> miembrosDto = new ArrayList<>();
+        List<Miembro> miembros = miembroDao.getAllMiembros();
+        for (Miembro miembro1 : miembros) {
+            miembrosDto.add(MiembroDto.builder()
+                    .idMiembro(miembro1.getIdMiembro())
+                    .idBautizo(miembro1.getIdBautizo())
+                    .idObrero(miembro1.getIdObrero())
+                    .nombreMiembro(miembro1.getNombreMiembro())
+                    .apellidosMiembro(miembro1.getApellidosMiembro())
+                    .fechaNacimientoMiembro(miembro1.getFechaNacimientoMiembro())
+                    .ciMiembro(miembro1.getCiMiembro())
+                    .telefonoMiembro(miembro1.getTelefonoMiembro())
+                    .direccionMiembro(miembro1.getDireccionMiembro())
+                    .build());
+        }
+
+        return miembrosDto;
     }
     @Transactional
     @Override
-    public Miembro save(MiembroDto miembroDto) {
+    public MiembroDto save(MiembroDto miembroDto) {
         Miembro miembro = Miembro.builder()
                 .idMiembro(miembroDto.getIdMiembro())
                 .idBautizo(miembroDto.getIdBautizo())
@@ -35,24 +52,80 @@ public class MiembroImpl implements IMiembro {
                 .telefonoMiembro(miembroDto.getTelefonoMiembro())
                 .direccionMiembro(miembroDto.getDireccionMiembro())
                 .build();
-        return miembroDao.save(miembro);
+        Miembro miembroSave = miembroDao.save(miembro);
+        MiembroDto miembrosDtoSave = MiembroDto.builder()
+                .idMiembro(miembroSave.getIdMiembro())
+                .idBautizo(miembroSave.getIdBautizo())
+                .idObrero(miembroSave.getIdObrero())
+                .nombreMiembro(miembroSave.getNombreMiembro())
+                .apellidosMiembro(miembroSave.getApellidosMiembro())
+                .fechaNacimientoMiembro(miembroSave.getFechaNacimientoMiembro())
+                .ciMiembro(miembroSave.getCiMiembro())
+                .telefonoMiembro(miembroSave.getTelefonoMiembro())
+                .direccionMiembro(miembroSave.getDireccionMiembro())
+                .build();
+        return miembrosDtoSave;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Miembro findById(Integer id) {
-        return miembroDao.findById(id).orElse(null);
+    public MiembroDto findById(Integer id) {
+        Miembro miembroFindById = miembroDao.findById(id).orElse(null);
+        MiembroDto miembrosDtoSave = null;
+        if(miembroFindById != null){
+            miembrosDtoSave = MiembroDto.builder()
+                    .idMiembro(miembroFindById.getIdMiembro())
+                    .idBautizo(miembroFindById.getIdBautizo())
+                    .idObrero(miembroFindById.getIdObrero())
+                    .nombreMiembro(miembroFindById.getNombreMiembro())
+                    .apellidosMiembro(miembroFindById.getApellidosMiembro())
+                    .fechaNacimientoMiembro(miembroFindById.getFechaNacimientoMiembro())
+                    .ciMiembro(miembroFindById.getCiMiembro())
+                    .telefonoMiembro(miembroFindById.getTelefonoMiembro())
+                    .direccionMiembro(miembroFindById.getDireccionMiembro())
+                    .build();
+        }
+        return miembrosDtoSave;
     }
     @Transactional
     @Override
-    public void delete(Miembro miembro) {
+    public void delete(MiembroDto miembroDto) {
+
+        Miembro miembro = Miembro.builder()
+                .idMiembro(miembroDto.getIdMiembro())
+                .idBautizo(miembroDto.getIdBautizo())
+                .idObrero(miembroDto.getIdObrero())
+                .nombreMiembro(miembroDto.getNombreMiembro())
+                .apellidosMiembro(miembroDto.getApellidosMiembro())
+                .fechaNacimientoMiembro(miembroDto.getFechaNacimientoMiembro())
+                .ciMiembro(miembroDto.getCiMiembro())
+                .telefonoMiembro(miembroDto.getTelefonoMiembro())
+                .direccionMiembro(miembroDto.getDireccionMiembro())
+                .build();
+
         miembroDao.delete(miembro);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Miembro> getAllMiembros() {
-        return miembroDao.getAllMiembros();
+    public List<MiembroDto> getAllMiembros() {
+        List<MiembroDto> miembrosDto = new ArrayList<>();
+        List<Miembro> miembros = miembroDao.getAllMiembros();
+        for (Miembro miembro1 : miembros) {
+            miembrosDto.add(MiembroDto.builder()
+                    .idMiembro(miembro1.getIdMiembro())
+                    .idBautizo(miembro1.getIdBautizo())
+                    .idObrero(miembro1.getIdObrero())
+                    .nombreMiembro(miembro1.getNombreMiembro())
+                    .apellidosMiembro(miembro1.getApellidosMiembro())
+                    .fechaNacimientoMiembro(miembro1.getFechaNacimientoMiembro())
+                    .ciMiembro(miembro1.getCiMiembro())
+                    .telefonoMiembro(miembro1.getTelefonoMiembro())
+                    .direccionMiembro(miembro1.getDireccionMiembro())
+                    .build());
+        }
+
+        return miembrosDto;
     }
 
 }

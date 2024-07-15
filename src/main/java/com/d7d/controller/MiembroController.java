@@ -28,24 +28,13 @@ public class MiembroController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody MiembroDto miembroDto) {
         ResponseEntity<?> responseEntity = null;
-        Miembro miembroSave = null;
+        MiembroDto miembroSave = null;
         try {
             miembroSave = miembroService.save(miembroDto);
-            miembroDto = MiembroDto.builder()
-                    .idMiembro(miembroSave.getIdMiembro())
-                    .idBautizo(miembroSave.getIdBautizo())
-                    .idObrero(miembroSave.getIdObrero())
-                    .nombreMiembro(miembroSave.getNombreMiembro())
-                    .apellidosMiembro(miembroSave.getApellidosMiembro())
-                    .fechaNacimientoMiembro(miembroSave.getFechaNacimientoMiembro())
-                    .ciMiembro(miembroSave.getCiMiembro())
-                    .telefonoMiembro(miembroSave.getTelefonoMiembro())
-                    .direccionMiembro(miembroSave.getDireccionMiembro())
-                    .build();
             responseEntity = new ResponseEntity<>(
                     MessageResponse.builder()
                             .message("Se guardo.")
-                            .datos(miembroDto)
+                            .datos(miembroSave)
                             .nombreTabla(miembroSave.getClass().getSimpleName())
                             .build()
                     , HttpStatus.CREATED
@@ -65,18 +54,8 @@ public class MiembroController {
     @PutMapping("/miembro")
     @ResponseStatus(HttpStatus.CREATED)
     public MiembroDto update(@RequestBody MiembroDto miembroDto) {
-        Miembro miembroUpdate = miembroService.save(miembroDto);
-        return MiembroDto.builder()
-                .idMiembro(miembroUpdate.getIdMiembro())
-                .idBautizo(miembroUpdate.getIdBautizo())
-                .idObrero(miembroUpdate.getIdObrero())
-                .nombreMiembro(miembroUpdate.getNombreMiembro())
-                .apellidosMiembro(miembroUpdate.getApellidosMiembro())
-                .fechaNacimientoMiembro(miembroUpdate.getFechaNacimientoMiembro())
-                .ciMiembro(miembroUpdate.getCiMiembro())
-                .telefonoMiembro(miembroUpdate.getTelefonoMiembro())
-                .direccionMiembro(miembroUpdate.getDireccionMiembro())
-                .build();
+        MiembroDto miembroUpdate = miembroService.save(miembroDto);
+        return miembroUpdate;
     }
 
     @DeleteMapping("/miembro/{id}")
@@ -86,21 +65,33 @@ public class MiembroController {
         Map<String, Object> response = new HashMap<>();//uso de Map
 
         try {
-            Miembro miembroDelete = miembroService.findById(id);
-            miembroService.delete(miembroDelete);
+            MiembroDto miembroDelete = miembroService.findById(id);
+            if(miembroDelete != null){
+                miembroService.delete(miembroDelete);
 
-            response.put("mensaje", "Se elimino correctamente");
-            response.put("cliente", miembroDelete);
-            response.put("error", 0);
+                response.put("mensaje", "Se elimino correctamente");
+                response.put("cliente", miembroDelete);
+                response.put("error", 0);
 
-            responseEntity = new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message("Se elimino correctamente")
-                            .datos(miembroDelete)
-                            .nombreTabla(miembroDelete.getClass().getSimpleName())
-                            .build()
-                    , HttpStatus.OK
-            );
+                responseEntity = new ResponseEntity<>(
+                        MessageResponse.builder()
+                                .message("Se elimino correctamente")
+                                .datos(miembroDelete)
+                                .nombreTabla("Miembro")
+                                .build()
+                        , HttpStatus.OK
+                );
+            }
+            else{
+                responseEntity = new ResponseEntity<>(
+                        MessageResponse.builder()
+                                .message("No exist el registro :" +id)
+                                .datos("null")
+                                .nombreTabla("Miembro")
+                                .build()
+                        , HttpStatus.OK
+                );
+            }
         } catch (DataAccessException exDta) {
             response.put("mensaje", exDta.getMessage());
             response.put("cliente", null);
@@ -122,8 +113,7 @@ public class MiembroController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> showById(@PathVariable("id") Integer id) {
         ResponseEntity<?> responseEntity = null;
-        Miembro miembroFiedById = new Miembro();
-        MiembroDto miembrosDto = null;
+        MiembroDto miembroFiedById = null;
         try {
             miembroFiedById = miembroService.findById(id);
             if (miembroFiedById == null) {
@@ -135,22 +125,11 @@ public class MiembroController {
                         , HttpStatus.INTERNAL_SERVER_ERROR
                 );
             } else {
-                miembrosDto = MiembroDto.builder()
-                        .idMiembro(miembroFiedById.getIdMiembro())
-                        .idBautizo(miembroFiedById.getIdBautizo())
-                        .idObrero(miembroFiedById.getIdObrero())
-                        .nombreMiembro(miembroFiedById.getNombreMiembro())
-                        .apellidosMiembro(miembroFiedById.getApellidosMiembro())
-                        .fechaNacimientoMiembro(miembroFiedById.getFechaNacimientoMiembro())
-                        .ciMiembro(miembroFiedById.getCiMiembro())
-                        .telefonoMiembro(miembroFiedById.getTelefonoMiembro())
-                        .direccionMiembro(miembroFiedById.getDireccionMiembro())
-                        .build();
                 responseEntity = new ResponseEntity<>(
                         MessageResponse.builder()
                                 .message("Se encontro.")
-                                .datos(miembrosDto)
-                                .nombreTabla(miembroFiedById.getClass().getSimpleName())
+                                .datos(miembroFiedById)
+                                .nombreTabla("Miembro")
                                 .build()
                         , HttpStatus.OK
                 );
@@ -171,27 +150,13 @@ public class MiembroController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> listAll() {
         ResponseEntity<?> responseEntity = null;
-        List<MiembroDto> miembrosDto = new ArrayList<MiembroDto>();
-        List<Miembro> miembros = miembroService.listAll();
+        List<MiembroDto> miembrosDto = miembroService.listAll();
         try {
-            for (Miembro miembro1 : miembros) {
-                miembrosDto.add(MiembroDto.builder()
-                        .idMiembro(miembro1.getIdMiembro())
-                        .idBautizo(miembro1.getIdBautizo())
-                        .idObrero(miembro1.getIdObrero())
-                        .nombreMiembro(miembro1.getNombreMiembro())
-                        .apellidosMiembro(miembro1.getApellidosMiembro())
-                        .fechaNacimientoMiembro(miembro1.getFechaNacimientoMiembro())
-                        .ciMiembro(miembro1.getCiMiembro())
-                        .telefonoMiembro(miembro1.getTelefonoMiembro())
-                        .direccionMiembro(miembro1.getDireccionMiembro())
-                        .build());
-            }
             responseEntity = new ResponseEntity<>(
                     MessageResponse.builder()
-                            .message("Se encontraron (" + miembros.size() + ") registros.")
+                            .message("Se encontraron (" + miembrosDto.size() + ") registros.")
                             .datos(miembrosDto)
-//                            .nombreTabla(miembros.get(0).getClass().getSimpleName())
+                            .nombreTabla("Miembro")
                             .build()
                     , HttpStatus.OK
             );
@@ -211,7 +176,7 @@ public class MiembroController {
     @GetMapping("/miembros2")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(readOnly = true)
-    public List<Miembro> getAll() {
+    public List<MiembroDto> getAll() {
         return miembroService.getAllMiembros();
     }
 

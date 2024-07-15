@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface IMiembro {
 
-    public List<Miembro> listAll();
-    public Miembro save(MiembroDto miembroDto);
+    public List<MiembroDto> listAll();
+    public MiembroDto save(MiembroDto miembroDto);
 
-    public Miembro findById(Integer id);
-    public void delete(Miembro miembro);
+    public MiembroDto findById(Integer id);
+    public void delete(MiembroDto miembro);
 
-    public List<Miembro> getAllMiembros();
+    public List<MiembroDto> getAllMiembros();
 
 }

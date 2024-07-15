@@ -11,35 +11,35 @@ import java.util.Date;
 @ToString
 @Builder
 @Entity
-@Table(name = "miembro")
+@Table(name = "MIEMBRO")
 public class Miembro implements java.io.Serializable {
 
     @Id
-    @Column(name = "id_Miembro")
+    @Column(name = "ID_MIEMBRO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMiembro;
 
-    @Column(name = "id_Bautizo")
+    @Column(name = "ID_BAUTIZO")
     private Integer idBautizo;
 
-    @Column(name = "id_Obrero")
+    @Column(name = "ID_OBRERO")
     private Integer idObrero;
 
-    @Column(name = "nombre_Miembro")
+    @Column(name = "NOMBRE_MIEMBRO")
     private String nombreMiembro;
 
-    @Column(name = "apellidos_Miembro")
+    @Column(name = "APELLIDOS_MIEMBRO")
     private String apellidosMiembro;
 
-    @Column(name = "fecha_Nacimiento_Miembro")
+    @Column(name = "FECHA_NACIMIENTO_MIEMBRO")
     private Date fechaNacimientoMiembro;
 
-    @Column(name = "ci_Miembro")
+    @Column(name = "CI_MIEMBRO")
     private String ciMiembro;
 
-    @Column(name = "telefono_Miembro")
+    @Column(name = "TELEFONO_MIEMBRO")
     private Integer telefonoMiembro;
 
-    @Column(name = "direccion_Miembro")
+    @Column(name = "DIRECCION_MIEMBRO")
     private String direccionMiembro;
 }
