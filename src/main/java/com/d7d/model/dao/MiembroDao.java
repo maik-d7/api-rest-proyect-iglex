@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface MiembroDao extends CrudRepository<Miembro, Integer> {
 
-    @Query(value = " SELECT * FROM miembro ORDER BY id_miembro ASC; ", nativeQuery = true)
+    @Query(value = " SELECT * FROM MIEMBRO ORDER BY id_miembro ASC; ", nativeQuery = true)
     List<Miembro> getAllMiembros();
 
 }
