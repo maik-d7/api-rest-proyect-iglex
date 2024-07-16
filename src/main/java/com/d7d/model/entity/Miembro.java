@@ -9,8 +9,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Builder
 @Entity
+@Builder
 @Table(name = "MIEMBRO")
 public class Miembro implements java.io.Serializable {
 

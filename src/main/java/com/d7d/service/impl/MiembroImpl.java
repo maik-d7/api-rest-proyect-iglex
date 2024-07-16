@@ -20,7 +20,7 @@ public class MiembroImpl implements IMiembro {
     @Transactional(readOnly = true)
     @Override
     public List<MiembroDto> listAll() {
-        List<MiembroDto> miembrosDto = new ArrayList<>();
+        List<MiembroDto> miembrosDto = null;
         List<Miembro> miembros = miembroDao.getAllMiembros();
         for (Miembro miembro1 : miembros) {
             miembrosDto.add(MiembroDto.builder()
