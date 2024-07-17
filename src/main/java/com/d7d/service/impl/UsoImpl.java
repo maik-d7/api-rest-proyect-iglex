@@ -27,7 +27,7 @@ public class UsoImpl implements IUso {
         for (Uso uso : usos) {
             usoDto.add(UsoDto.builder()
                     .idUsa(uso.getIdUsa())
-                    .usuario(uso.getUsuario())
+                    .idusuario(uso.getUsuario().getIdUsuario())
                     .idEntidadUsa(uso.getIdEntidadUsa())
                     .nombreEntidadUsa(uso.getNombreEntidadUsa())
                     .accionUsa(uso.getAccionUsa())

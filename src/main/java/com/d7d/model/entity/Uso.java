@@ -20,7 +20,7 @@ public class Uso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USA")
-    private int idUsa;
+    private Integer idUsa;
 
     @Column(name = "ID_ENTIDAD_USA")
     private int idEntidadUsa;

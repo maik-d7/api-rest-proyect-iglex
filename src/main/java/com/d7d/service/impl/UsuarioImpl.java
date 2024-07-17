@@ -32,7 +32,7 @@ public class UsuarioImpl implements IUsuario {
                     .correoUsuario(usuario.getCorreoUsuario())
                     .passUsuario(usuario.getPassUsuario())
                     .fechaUsuario(usuario.getFechaUsuario())
-                    .usos(usuario.getUsos())
+                    .usos(new ArrayList<>() )
                     .build());
         }
         return usuarioDto;

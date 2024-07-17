@@ -11,11 +11,12 @@ import java.util.Date;
 @ToString
 @Builder
 public class UsoDto {
-    private int idUsa;
 
-    private Usuario usuario;
+    private Integer idUsa;
 
-    private int idEntidadUsa;
+    private Integer idusuario;
+
+    private Integer idEntidadUsa;
 
     private String nombreEntidadUsa;
 

@@ -19,7 +19,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
-    private int idUsuario;
+    private Integer idUsuario;
 
     @Column(name = "NOMBRE_USUARIO", nullable = false)
     private String nombreUsuario;

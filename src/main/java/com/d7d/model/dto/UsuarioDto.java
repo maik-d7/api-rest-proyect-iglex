@@ -22,5 +22,5 @@ public class UsuarioDto {
 
     private Date fechaUsuario;
 
-    private List<Uso> usos;
+    private List<UsoDto> usos;
 }

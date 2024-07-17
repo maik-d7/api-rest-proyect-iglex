@@ -17,7 +17,7 @@ public class Miembro implements java.io.Serializable {
     @Id
     @Column(name = "ID_MIEMBRO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idMiembro;
+    private Integer idMiembro;
 
     @Column(name = "ID_BAUTIZO")
     private Integer idBautizo;
