@@ -6,11 +6,11 @@ import lombok.*;
 import java.util.Date;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
-@Builder
 @Table(name = "MIEMBRO")
 public class Miembro implements java.io.Serializable {
 

@@ -1,13 +1,17 @@
 package com.d7d.model.dto;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
 @Data
-@ToString
 @Builder
+@ToString
+@ArraySchema
+@NoArgsConstructor
+@AllArgsConstructor
 public class MiembroDto implements java.io.Serializable {
 
     private int idMiembro;

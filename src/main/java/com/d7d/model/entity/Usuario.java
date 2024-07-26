@@ -36,4 +36,5 @@ public class Usuario {
     @OneToMany(targetEntity = Uso.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_USUARIO")
     private List<Uso> usos;
+
 }

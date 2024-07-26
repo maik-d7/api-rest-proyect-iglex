@@ -22,8 +22,8 @@ public class Uso {
     @Column(name = "ID_USA")
     private Integer idUsa;
 
-    @Column(name = "ID_ENTIDAD_USA")
-    private int idEntidadUsa;
+    @Column(name = "ID_ENTIDAD_USA", nullable = false)
+    private Integer idEntidadUsa;
 
     @Column(name = "NOMBRE_ENTIDAD_USA")
     private String nombreEntidadUsa;
