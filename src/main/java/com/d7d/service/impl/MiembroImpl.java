@@ -145,9 +145,6 @@ public class MiembroImpl implements IMiembro {
 //                    .direccionMiembro(miembro1.getDireccionMiembro())
 //                    .build());
         }
-a
-
-
         return miembrosDto;
     }
 }
