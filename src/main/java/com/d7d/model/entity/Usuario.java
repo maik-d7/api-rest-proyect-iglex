@@ -1,16 +1,17 @@
 package com.d7d.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
@@ -33,8 +34,8 @@ public class Usuario {
     @Column(name = "FECHA_USUARIO")
     private Date fechaUsuario;
 
-    @OneToMany(targetEntity = Uso.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_USUARIO")
+    @OneToMany(mappedBy = "usuario", targetEntity = Uso.class, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Uso> usos;
 
 }

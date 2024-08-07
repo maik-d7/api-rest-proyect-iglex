@@ -1,9 +1,8 @@
 package com.d7d.controller;
 
 
-import com.d7d.model.dto.MiembroDto;
-import com.d7d.model.dto.UsuarioDto;
-import com.d7d.service.IUsuario;
+import com.d7d.model.dto.UsoDto;
+import com.d7d.service.IUso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuario/api/v1")
-public class UsuarioController {
-
+@RequestMapping("/uso/api/v1")
+public class UsoController {
     @Autowired
-    private IUsuario usuarioService;
+    private IUso usoServivio;
 
     @GetMapping("/showAll")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(readOnly = true)
-    public List<UsuarioDto> getAll() {
-        return usuarioService.listAllUsuarios();
+    public List<UsoDto> getAll() {
+        return usoServivio.listAll();
     }
+
 }

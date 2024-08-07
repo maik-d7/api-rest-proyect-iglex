@@ -1,13 +1,14 @@
 package com.d7d.service.impl;
 
 import com.d7d.model.dao.UsuarioDao;
-import com.d7d.model.dto.MiembroDto;
 import com.d7d.model.dto.UsoDto;
 import com.d7d.model.dto.UsuarioDto;
-import com.d7d.model.entity.Miembro;
 import com.d7d.model.entity.Uso;
 import com.d7d.model.entity.Usuario;
 import com.d7d.service.IUsuario;
+import jakarta.annotation.PostConstruct;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,69 +23,72 @@ public class UsuarioImpl implements IUsuario {
 
     @Autowired
     private UsuarioDao usuarioDao;
+    private ModelMapper modelMapper = new ModelMapper();
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<UsuarioDto> listAll() {
-//        List<UsuarioDto> usuarioDto = new ArrayList<>();
-//        Iterable<Usuario> usuarios = usuarioDao.findAll();
-//        List<UsoDto> usoDtos = new ArrayList<>();
-//
-//        for (Usuario usuario : usuarios) {
-//            usuarioDto.add(UsuarioDto.builder()
-//                    .idUsuario(usuario.getIdUsuario())
-//                    .nombreUsuario(usuario.getNombreUsuario())
-//                    .correoUsuario(usuario.getCorreoUsuario())
-//                    .passUsuario(usuario.getPassUsuario())
-//                    .fechaUsuario(usuario.getFechaUsuario())
-//                    .usos( /* quiero usar aqui la esprecion lambda*/)
-//                    .build());
-//        }
-//        return usuarioDto;
-//    }
+
+    @PostConstruct
+    public void init() {
+        modelMapper.addMappings(new PropertyMap<Usuario, UsuarioDto>() {
+            @Override
+            protected void configure() {
+                map().setUsos(null);
+            }
+        });
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioDto> listAllx() {
+        Iterable<Usuario> usuarios = usuarioDao.findAll();
+        return StreamSupport.stream(usuarios.spliterator(), false)
+                .map(usuario -> {
+                    UsuarioDto usuarioDto = modelMapper.map(usuario, UsuarioDto.class);
+                    List<UsoDto> usoDtos = usuario.getUsos().stream()
+                            .map(uso -> modelMapper.map(uso, UsoDto.class))
+                            .collect(Collectors.toList());
+                    usuarioDto.setUsos(usoDtos);
+                    return usuarioDto;
+                })
+                .collect(Collectors.toList());
+    }
 
 
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioDto> listAll() {
         Iterable<Usuario> usuarios = usuarioDao.findAll();
+        List<UsuarioDto> usuarioDtosRes = new ArrayList<>();
 
-        return StreamSupport.stream(usuarios.spliterator(), false)
-                .map(usuario -> UsuarioDto.builder()
-                        .idUsuario(usuario.getIdUsuario())
-                        .nombreUsuario(usuario.getNombreUsuario())
-                        .correoUsuario(usuario.getCorreoUsuario())
-                        .passUsuario(usuario.getPassUsuario())
-                        .fechaUsuario(usuario.getFechaUsuario())
-                        .usos(usuario.getUsos().stream()
-                                .map(uso -> UsoDto.builder()
-                                        .idUsa(uso.getIdUsa())
-                                        .idEntidadUsa(uso.getIdEntidadUsa())
-                                        .idusuario(uso.getUsuario().getIdUsuario())
-                                        .fechaUsa(uso.getFechaUsa())
-                                        .accionUsa(uso.getAccionUsa())
-                                        .nombreEntidadUsa(uso.getNombreEntidadUsa())
-                                        .build())
-                                .collect(Collectors.toList()))
-                        .build())
-                .collect(Collectors.toList());
+        for (Usuario usuario : usuarios) {
+            usuarioDtosRes.add(modelMapper.map(usuario, UsuarioDto.class));
+        }
+        return usuarioDtosRes;
+
     }
 
 
-    private List<UsoDto> UsoAUsoDto(List<Uso> usos) {
-        List<UsoDto> rUsoDto = new ArrayList<>();
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioDto> listAllUsuarios() {
+        Iterable<Usuario> usuarios = usuarioDao.findAll();
+        return mapUsuariosToUsuarioDtos(usuarios);
+    }
 
-        for (Uso uso : usos) {
-            rUsoDto.add(UsoDto.builder()
-                    .idUsa(uso.getIdUsa())
-                    .idEntidadUsa(uso.getIdEntidadUsa())
-                    .idusuario(uso.getUsuario().getIdUsuario())
-                    .fechaUsa(uso.getFechaUsa())
-                    .accionUsa(uso.getAccionUsa())
-                    .nombreEntidadUsa(uso.getNombreEntidadUsa())
-                    .build()
-            );
-        }
-        return rUsoDto;
+    private List<UsuarioDto> mapUsuariosToUsuarioDtos(Iterable<Usuario> usuarios) {
+        return ((List<Usuario>) usuarios).stream()
+                .map(usuario -> {
+                    UsuarioDto usuarioDto = modelMapper.map(usuario, UsuarioDto.class);
+                    List<UsoDto> usoDtos = usuario.getUsos().stream()
+                            .map(uso -> {
+                                UsoDto usoDto = modelMapper.map(uso, UsoDto.class);
+                                usoDto.setUsuario(null); // Evita la referencia cíclica
+                                return usoDto;
+                            })
+                            .collect(Collectors.toList());
+                    usuarioDto.setUsos(usoDtos);
+                    return usuarioDto;
+                })
+                .collect(Collectors.toList());
     }
 }

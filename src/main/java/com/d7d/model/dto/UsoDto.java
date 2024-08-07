@@ -1,22 +1,25 @@
 package com.d7d.model.dto;
 
-import com.d7d.model.entity.Usuario;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import java.util.Date;
 
 @Data
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsoDto {
 
     private Integer idUsa;
 
-    private Integer idusuario;
-
     private Integer idEntidadUsa;
+
+    //@JsonManagedReference
+    //@JsonBackReference
+    private UsuarioDto usuario;
 
     private String nombreEntidadUsa;
 
